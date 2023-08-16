@@ -6,46 +6,19 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
-    <title>User Registration</title>
+    <title>User Registration and Login</title>
 </head>
 <body>
-    <div class="container">
-        <h1>User Registration</h1>
-        <form id="registration-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="email">Email ID:</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="confirm-password">Confirm Password:</label>
-            <input type="password" id="confirm-password" name="confirmPassword" required>
-            
-            <button type="submit">Register</button>
+    <div class="user-selection">
+        <h2>Welcome!</h2>
+        <p>Are you a new user or an existing user?</p>
+        <form id="userSelectionForm">
+            <input type="radio" id="newUser" name="userType" value="new">
+            <label for="newUser">New User</label>
+            <input type="radio" id="existingUser" name="userType" value="existing">
+            <label for="existingUser">Existing User</label>
+            <button type="submit">Continue</button>
         </form>
-        <div id="message"></div>
     </div>
-    <!-- ... (existing code) ... -->
-
-<div class="container">
-    <h1>User Registration and Login</h1>
-    <!-- User Registration Form (existing code) -->
-
-    <h2>User Login</h2>
-    <form id="login-form">
-        <label for="login-email">Email ID:</label>
-        <input type="email" id="login-email" name="email" required>
-        
-        <label for="login-password">Password:</label>
-        <input type="password" id="login-password" name="password" required>
-        
-        <button type="submit">Login</button>
-    </form>
-    <div id="login-message"></div>
-</div>
-
 </body>
 </html>
