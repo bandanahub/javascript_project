@@ -33,3 +33,34 @@ $(document).ready(function () {
         });
     });
 });
+
+
+$(document).ready(function () {
+    
+
+    $('#login-form').submit(function (event) {
+        event.preventDefault();
+
+        var email = $('#login-email').val();
+        var password = $('#login-password').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/login',
+            data: {
+                email: email,
+                password: password
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#login-message').html('<p>Login successful.</p>');
+                } else {
+                    $('#login-message').html('<p>Login failed. Please check your credentials.</p>');
+                }
+            },
+            error: function () {
+                $('#login-message').html('<p>Error processing the request.</p>');
+            }
+        });
+    });
+});
