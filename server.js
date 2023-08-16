@@ -25,66 +25,51 @@ const User = mongoose.model('User', {
 
 // User Registration
 app.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
-
-    // Perform server-side validation here if needed
-
-    const newUser = new User({
-        name: name,
-        email: email,
-        password: password
-    });
-
     try {
+        const { name, email, password } = req.body;
+        const newUser = new User({ name, email, password });
         await newUser.save();
-        res.json({ success: true });
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        console.error('Error saving user:', error);
-        res.status(500).json({ success: false });
+        res.status(500).json({ message: 'Error registering user', error });
     }
 });
 
 // User Login
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
     try {
-        const user = await User.findOne({ email: email, password: password });
+        const { email, password } = req.body;
+        const user = await User.findOne({ email, password });
         if (user) {
-            // For simplicity, you can use sessions to maintain authentication
-            req.session.user = user;
-            res.json({ success: true });
+            res.status(200).json({ message: 'Login successful' });
         } else {
-            res.json({ success: false });
+            res.status(401).json({ message: 'Invalid credentials' });
         }
     } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ success: false });
+        res.status(500).json({ message: 'Error logging in', error });
     }
 });
 
-// Product Data
+// Product Data (same as before)
 const products = [
-    {
-        id: 1,
-        name: 'Product A',
-        imageUrl: 'product-a.jpg',
-        price: 10.99,
-        quantity: 20
-    },
-    {
-        id: 2,
-        name: 'Product B',
-        imageUrl: 'product-b.jpg',
-        price: 19.99,
-        quantity: 15
-    },
-    // Add more products...
+    // ... (existing product data)
 ];
 
-// Product Listing
+// Product Listing (same as before)
 app.get('/products', (req, res) => {
     res.json({ products: products });
+});
+
+// Product Details Route
+app.get('/products/:productId', (req, res) => {
+    const productId = req.params.productId;
+    const product = products.find(product => product.id === parseInt(productId));
+
+    if (product) {
+        res.json(product);
+    } else {
+        res.status(404).json({ message: 'Product not found' });
+    }
 });
 
 // Server Start
