@@ -9,10 +9,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // MongoDB Connection
-const dbUrl = 'your_db_url'; // Replace with your MongoDB connection string
+const dbUrl = 'mongodb://localhost:27017/<backend>'; // Replace <your-database-name> with your actual database name
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
+
 
 // User Model
 const User = mongoose.model('User', {
@@ -22,11 +23,18 @@ const User = mongoose.model('User', {
 });
 
 // Routes
-
 // User Registration
 app.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
+        
+        // Check if user with the same email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            res.status(409).json({ message: 'User with this email already exists' });
+            return;
+        }
+        
         const newUser = new User({ name, email, password });
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
@@ -35,11 +43,13 @@ app.post('/register', async (req, res) => {
     }
 });
 
+
 // User Login
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email, password });
+
         if (user) {
             res.status(200).json({ message: 'Login successful' });
         } else {
@@ -49,6 +59,7 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Error logging in', error });
     }
 });
+
 
 // Product Data (same as before)
 const products = [
